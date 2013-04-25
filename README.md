@@ -1,4 +1,4 @@
 Zaakpay
 =======
 
-Zaakpay payment processor for civicrm
+Zaakpay payment processor for civicrm (Under construction)
