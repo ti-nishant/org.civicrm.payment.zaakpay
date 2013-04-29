@@ -2,8 +2,6 @@
 
 include('checksum.php');
 require_once 'CRM/Core/Payment.php';
-//require_once 'civicrm.config.php';
-//require_once 'CRM/Core/Config.php';
 
 class testdrupal_payment_zaakpay extends CRM_Core_Payment {
 
@@ -98,8 +96,9 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
     if ($component != 'contribute' && $component != 'event') {
       CRM_Core_Error::fatal(ts('Component is invalid'));
     }
-    
-    $email = $params['email-5']?$params['email-5']:$params['email-Primary'];
+    dpm($params);
+   // die;
+    $email = isset($params['email-5'])?$params['email-5']:$params['email-Primary'];
     
     /* Sanitization of every data is important to calculate checksum. */
     /* Refer to zaakpay transact api documentation to see which array key means what */
@@ -127,16 +126,15 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
       'txnDate'	=>	Checksum::sanitizedParam(date('Y-n-d')),
     );
     
-    
+
     /* set return url based on the component */
     
     if($component == 'contribute'){
-    	$this->data['returnUrl'] = CRM_Utils_System::baseCMSURL()."civicrm/payment/ipn?processor_name=Zaakpay&module=contribute&qfKey=".$params['qfKey'].'&inId='.$params['invoiceID'];
+    	$this->data['returnUrl'] = CRM_Utils_System::baseCMSURL()."civicrm/payment/ipn?processor_name=Zaakpay&md=contribute&qfKey=".$params['qfKey'].'&inId='.$params['invoiceID'];
     }else if($component == 'event'){
-    	$this->data['returnUrl'] = CRM_Utils_System::baseCMSURL()."civicrm/payment/ipn?processor_name=Zaakpay&module=event&qfKey=".$params['qfKey'].'&inId='.$params['invoiceID'];
+    	$this->data['returnUrl'] = CRM_Utils_System::baseCMSURL()."civicrm/payment/ipn?processor_name=Zaakpay&md=event&qfKey=".$params['qfKey'].'&inId='.$params['invoiceID'];
     }
-	
-	
+
 	/* important because without storing session objects, 
 	*  civicrm wouldnt know if the confirm page ever submitted as we are using exit at the end
 	*  and it will never redirect to the thank you page, rather keeps redirecting to the confirmation page.
@@ -168,6 +166,79 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
   }
   
   
+  function newOrderNotify( $success, $privateData, $component, $amount, $transactionReference ) {
+        $ids = $input = $params = array( );
+ 	
+        $input['component'] = strtolower($component);
+ 
+        $ids['contact']          = $privateData['contactID'];
+        $ids['contribution']     = $privateData['contributionID'];//, 'Integer', $privateData, true );
+ 
+        if ( $input['component'] == "event" ) {
+            $ids['event']       = $privateData['eventID'];
+            $ids['participant'] = $privateData['participantID'];
+            $ids['membership']  = null;
+        } else {
+            $ids['membership'] = $privateData['membershipID'];
+        }
+        $ids['contributionRecur'] = $ids['contributionPage'] = null;
+ 
+ 		$baseIpn = new CRM_Core_Payment_BaseIPN();
+ 		
+        if ( ! $baseIpn->validateData( $input, $ids, $objects ) ) {
+            return false;
+        }
+ 
+        // make sure the invoice is valid and matches what we have in the contribution record
+        $input['invoice']    =  $privateData['invoiceID'];
+        $input['newInvoice'] =  $transactionReference;
+        $contribution        =& $objects['contribution'];
+        $input['trxn_id']  =    $transactionReference;
+ 
+        if ( $contribution->invoice_id != $input['invoice'] ) {
+            CRM_Core_Error::debug_log_message( "Invoice values dont match between database and IPN request" );
+            echo "Failure: Invoice values dont match between database and IPN request<p>";
+            return;
+        }
+ 
+        // lets replace invoice-id with Payment Processor -number because thats what is common and unique
+        // in subsequent calls or notifications sent by google.
+        $contribution->invoice_id = $input['newInvoice'];
+ 
+        $input['amount'] = $amount;
+ 
+        if ( $contribution->total_amount != $input['amount'] ) {
+            CRM_Core_Error::debug_log_message( "Amount values dont match between database and IPN request" );
+            echo "Failure: Amount values dont match between database and IPN request."
+                        .$contribution->total_amount."/".$input['amount']."<p>";
+            return;
+        }
+ 
+        require_once 'CRM/Core/Transaction.php';
+        $transaction = new CRM_Core_Transaction( );
+ 
+        // check if contribution is already completed, if so we ignore this ipn
+ 
+        if ( $contribution->contribution_status_id == 1 ) {
+            CRM_Core_Error::debug_log_message( "returning since contribution has already been handled" );
+            echo "Success: Contribution has already been handled<p>";
+            return true;
+        } else {
+            /* Since trxn_id hasn't got any use here,
+             * lets make use of it by passing the eventID/membershipTypeID to next level.
+             * And change trxn_id to the payment processor reference before finishing db update */
+            if ( $ids['event'] ) {
+                $contribution->trxn_id =
+                    $ids['event']       . CRM_Core_DAO::VALUE_SEPARATOR .
+                    $ids['participant'] ;
+            } else {
+                $contribution->trxn_id = $ids['membership'];
+            }
+        }
+        $this->completeTransaction ( $input, $ids, $objects, $transaction);
+        return true;
+    }
+  
   /*
   *	This is the function which handles the response 
   * when zaakpay redirects the user back to our website
@@ -178,16 +249,16 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
   public function handlePaymentNotification() {
   
 		require_once 'CRM/Utils/Array.php';
-		$module = CRM_Utils_Array::value('module', $_GET);
-		$qfKey = CRM_Utils_Array::value('qfKey', $_GET);
-		$invoideId = CRM_Utils_Array::value('inId', $_GET);
 
-		// Attempt to determine component type ...
+		$module = CRM_Utils_Array::value('md', $_GET);
+		$qfKey = CRM_Utils_Array::value('qfKey', $_GET);
+		$invoiceId = CRM_Utils_Array::value('inId', $_GET);
+
 		switch ($module) {
 		    case 'contribute':
-		    		$query = "UPDATE civicrm_contribution SET trxn_id='".$_POST['orderId']."' WHERE invoice_id=".$invoiceId."'";
-		    		CRM_Core_DAO::executeQuery($query);
 					if($_POST['responseCode'] == 100){
+						$query = "UPDATE civicrm_contribution SET trxn_id='".$_POST['orderId']."', contribution_status_id=1 where invoice_id='".$invoiceId."'";
+						 CRM_Core_DAO::executeQuery($query);
 						$url = CRM_Utils_System::url('civicrm/contribute/transact',
 													 "_qf_ThankYou_display=1&qfKey={$qfKey}",
 													  FALSE, 
@@ -207,7 +278,7 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
 		        break;
 		        
 		    case 'event':
-		    
+		    	
 					if($_POST['responseCode'] == 100){ // success code
 					  	$url = CRM_Utils_System::url('civicrm/event/register',
 													 "_qf_ThankYou_display=1&qfKey={$qfKey}",
@@ -215,6 +286,7 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
 						 							 NULL, 
 						 							 FALSE
 					  								);
+					  
 					 }else{ // error code
 					 	CRM_Core_Session::setStatus(ts($_POST['responseDescription']), ts('Zaakpay Error:'), 'error');
 						$url = CRM_Utils_System::url('civicrm/event/register',
@@ -234,7 +306,7 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
 		}
 		CRM_Utils_System::redirect($url);
 		
-  }
+  }	
 
 
 }
