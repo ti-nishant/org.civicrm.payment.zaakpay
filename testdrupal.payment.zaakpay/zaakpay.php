@@ -96,8 +96,7 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
     if ($component != 'contribute' && $component != 'event') {
       CRM_Core_Error::fatal(ts('Component is invalid'));
     }
-    dpm($params);
-   // die;
+
     $email = isset($params['email-5'])?$params['email-5']:$params['email-Primary'];
     
     /* Sanitization of every data is important to calculate checksum. */
@@ -132,7 +131,7 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
     if($component == 'contribute'){
     	$this->data['returnUrl'] = CRM_Utils_System::baseCMSURL()."civicrm/payment/ipn?processor_name=Zaakpay&md=contribute&qfKey=".$params['qfKey'].'&inId='.$params['invoiceID'];
     }else if($component == 'event'){
-    	$this->data['returnUrl'] = CRM_Utils_System::baseCMSURL()."civicrm/payment/ipn?processor_name=Zaakpay&md=event&qfKey=".$params['qfKey'].'&inId='.$params['invoiceID'];
+    	$this->data['returnUrl'] = CRM_Utils_System::baseCMSURL()."civicrm/payment/ipn?processor_name=Zaakpay&md=event&qfKey=".$params['qfKey'].'&pid='.$params['participantID']."&eid=".$params['eventID']."&inId=".$params['invoiceID'];
     }
 
 	/* important because without storing session objects, 
@@ -204,8 +203,19 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
 		        break;
 		        
 		    case 'event':
-		    	
+		
 					if($_POST['responseCode'] == 100){ // success code
+						
+						$participantId = CRM_Utils_Array::value('pid', $_GET);
+						$eventId = CRM_Utils_Array::value('eid', $_GET);
+					
+						$query = "UPDATE civicrm_participant SET status_id = 1 where id =".$participantId." AND event_id=".$eventId;
+						CRM_Core_DAO::executeQuery($query);
+						
+						$query = "UPDATE civicrm_contribution SET trxn_id='".$_POST['orderId']."', contribution_status_id=1 where invoice_id='".$invoiceId."'";
+						
+						CRM_Core_DAO::executeQuery($query);
+						
 					  	$url = CRM_Utils_System::url('civicrm/event/register',
 													 "_qf_ThankYou_display=1&qfKey={$qfKey}",
 						 							 FALSE, 
