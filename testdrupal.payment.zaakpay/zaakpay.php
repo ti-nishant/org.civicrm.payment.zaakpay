@@ -121,7 +121,7 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
       'mode'	=>	Checksum::sanitizedParam($this->_mode == 'test' ? 0 : 1),
       'currency'	=>	Checksum::sanitizedParam('INR'), // zaakpay only supports INR
       'amount'	=>	Checksum::sanitizedParam($params['amount']*100),
-      'merchantIpAddress'	=>	Checksum::sanitizedParam('127.0.0.1'),
+      'merchantIpAddress'	=>	Checksum::sanitizedParam($this->_paymentProcessor['signature']),
       'purpose'	=> Checksum::sanitizedParam(1),
       'productDescription'	=>	Checksum::sanitizedParam($params['description']),
       'txnDate'	=>	Checksum::sanitizedParam(date('Y-n-d')),
@@ -131,9 +131,9 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
     /* set return url based on the component */
     
     if($component == 'contribute'){
-    	$this->data['returnUrl'] = "http://localhost/drupal-test/civicrm/payment/ipn?processor_name=Zaakpay&module=contribute&qfKey=".$params['qfKey'].'&inId='.$params['invoiceID'];
+    	$this->data['returnUrl'] = CRM_Utils_System::baseCMSURL()."civicrm/payment/ipn?processor_name=Zaakpay&module=contribute&qfKey=".$params['qfKey'].'&inId='.$params['invoiceID'];
     }else if($component == 'event'){
-    	$this->data['returnUrl'] = "http://localhost/drupal-test/civicrm/payment/ipn?processor_name=Zaakpay&module=event&qfKey=".$params['qfKey'].'&inId='.$params['invoiceID'];
+    	$this->data['returnUrl'] = CRM_Utils_System::baseCMSURL()."civicrm/payment/ipn?processor_name=Zaakpay&module=event&qfKey=".$params['qfKey'].'&inId='.$params['invoiceID'];
     }
 	
 	
@@ -180,11 +180,13 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
 		require_once 'CRM/Utils/Array.php';
 		$module = CRM_Utils_Array::value('module', $_GET);
 		$qfKey = CRM_Utils_Array::value('qfKey', $_GET);
+		$invoideId = CRM_Utils_Array::value('inId', $_GET);
 
 		// Attempt to determine component type ...
 		switch ($module) {
 		    case 'contribute':
-		    
+		    		$query = "UPDATE civicrm_contribution SET trxn_id='".$_POST['orderId']."' WHERE invoice_id=".$invoiceId."'";
+		    		CRM_Core_DAO::executeQuery($query);
 					if($_POST['responseCode'] == 100){
 						$url = CRM_Utils_System::url('civicrm/contribute/transact',
 													 "_qf_ThankYou_display=1&qfKey={$qfKey}",
