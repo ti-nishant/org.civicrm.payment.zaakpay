@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<extension key="testdrupal.payment.zaakpay" type="payment">
+<extension key="org.civicrm.payment.zaakpay" type="payment">
     <file>zaakpay</file>
     <name>Zaakpay</name>
     <description>Zaakpay Payment Processor</description>

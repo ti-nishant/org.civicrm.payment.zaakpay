@@ -3,7 +3,7 @@
 include('checksum.php');
 require_once 'CRM/Core/Payment.php';
 
-class testdrupal_payment_zaakpay extends CRM_Core_Payment {
+class org_civicrm_payment_zaakpay extends CRM_Core_Payment {
 
   protected $templateDir;
   private $data;
@@ -35,7 +35,7 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
   function __construct($mode, &$paymentProcessor) {
 
     $config = CRM_Core_Config::singleton();
-    $this->templateDir = $config->extensionsDir . '/testdrupal.payment.zaakpay/templates/';
+    $this->templateDir = $config->extensionsDir . '/org.civicrm.payment.zaakpay/';
     $this->_mode = $mode;
     $this->_paymentProcessor = $paymentProcessor;
     $this->_processorName = ts('Zaakpay Payment Processor');
@@ -53,7 +53,7 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
   static function &singleton($mode, &$paymentProcessor) {
     $processorName = $paymentProcessor['name'];
     if (self::$_singleton[$processorName] === null) {
-      self::$_singleton[$processorName] = new testdrupal_payment_zaakpay($mode, $paymentProcessor);
+      self::$_singleton[$processorName] = new org_civicrm_payment_zaakpay($mode, $paymentProcessor);
     }
     return self::$_singleton[$processorName];
   }
@@ -136,7 +136,7 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
       $this->data['returnUrl'] = CRM_Utils_System::baseCMSURL() . "civicrm/payment/ipn?processor_name=Zaakpay&md=event&qfKey=" . $params['qfKey'] . '&pid=' . $params['participantID'] . "&eid=" . $params['eventID'] . "&inId=" . $params['invoiceID'];
     }
 
-    /* important because without storing session objects, 
+    /* important because without storing session objects,
      *  civicrm wouldnt know if the confirm page ever submitted as we are using exit at the end
      *  and it will never redirect to the thank you page, rather keeps redirecting to the confirmation page.
      */
@@ -166,7 +166,7 @@ class testdrupal_payment_zaakpay extends CRM_Core_Payment {
   }
 
   /*
-   * 	This is the function which handles the response 
+   * 	This is the function which handles the response
    * when zaakpay redirects the user back to our website
    * after transaction.
    * Refer to the $this->data['returnURL'] in above function to see how the Url should be created
