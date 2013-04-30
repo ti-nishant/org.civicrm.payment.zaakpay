@@ -3,6 +3,11 @@ Zaakpay
 
 Zaakpay payment processor for civicrm (Under construction)
 
+Resources:
+==========
+
+https://www.zaakpay.com/developers/guide
+
 Installation:
 ============
 
