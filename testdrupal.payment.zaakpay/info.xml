@@ -1,31 +1,33 @@
 <?xml version="1.0"?>
 <extension key="testdrupal.payment.zaakpay" type="payment">
-  <file>zaakpay</file>
-  <name>Zaakpay</name>
-  <description>Zaakpay Payment Processor</description>
-  <license>AGPL</license>
-  <maintainer>
-    <author>Nishant Bhorodia</author>
-    <email>nishant@example.com</email>
-  </maintainer>
-  <releaseDate>2013-04-18</releaseDate>
-  <version>1.0</version>
-  <compatibility><ver>4.2</ver></compatibility>
-  <typeInfo>
-   <userNameLabel>Merchant Identifier</userNameLabel>
-   <passwordLabel>Zaakpay Secret Key</passwordLabel>
-   <signatureLabel>Merchant's IP Address</signatureLabel>
-   <subjectLabel></subjectLabel>
-   <urlSiteDefault></urlSiteDefault>
-   <urlApiDefault></urlApiDefault>
-   <urlRecurDefault></urlRecurDefault>
-   <urlSiteTestDefault></urlSiteTestDefault>
-   <urlApiTestDefault></urlApiTestDefault>
-   <urlRecurTestDefault></urlRecurTestDefault>
-   <urlButtonDefault></urlButtonDefault>
-   <urlButtonTestDefault></urlButtonTestDefault>
-   <billingMode>notify</billingMode>
-   <isRecur>0</isRecur>
-   <paymentType>1</paymentType>
-  </typeInfo>
+    <file>zaakpay</file>
+    <name>Zaakpay</name>
+    <description>Zaakpay Payment Processor</description>
+    <license>AGPL</license>
+    <maintainer>
+        <author>Nishant Bhorodia</author>
+        <email>nishant@example.com</email>
+    </maintainer>
+    <releaseDate>2013-04-18</releaseDate>
+    <version>1.0</version>
+    <compatibility>
+        <ver>4.2</ver>
+    </compatibility>
+    <typeInfo>
+        <userNameLabel>Merchant Identifier</userNameLabel>
+        <passwordLabel>Zaakpay Secret Key</passwordLabel>
+        <signatureLabel>Merchant's IP Address</signatureLabel>
+        <subjectLabel></subjectLabel>
+        <urlSiteDefault></urlSiteDefault>
+        <urlApiDefault></urlApiDefault>
+        <urlRecurDefault></urlRecurDefault>
+        <urlSiteTestDefault></urlSiteTestDefault>
+        <urlApiTestDefault></urlApiTestDefault>
+        <urlRecurTestDefault></urlRecurTestDefault>
+        <urlButtonDefault></urlButtonDefault>
+        <urlButtonTestDefault></urlButtonTestDefault>
+        <billingMode>notify</billingMode>
+        <isRecur>0</isRecur>
+        <paymentType>1</paymentType>
+    </typeInfo>
 </extension>
