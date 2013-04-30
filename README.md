@@ -14,6 +14,20 @@ Installation:
 1. Go to Administer > System Settings > Manage Extensions.
 2. Enable the Zaakpay extension.
 
+Usage Pre-requisites:
+=====================
+
+		Create a Profile with the following fields:
+			-> First Name
+			-> Last Name
+			-> Address Name (Primary)
+			-> City (Primary)
+			-> State (Primary)
+			-> Country (Primary)
+			-> Postal Code (Primary)
+			-> Phone-Phone (Primary)
+			
+
 Usage:
 =====
 
@@ -24,21 +38,20 @@ Usage:
 
 	For Contributions:
 	=================
-		1. Create a Profile with the following fields:
-			-> First Name
-			-> Last Name
-			-> Address Name (Primary)
-			-> City (Primary)
-			-> State (Primary)
-			-> Country (Primary)
-			-> Postal Code (Primary)
-			-> Phone-Phone (Primary)
-			
-		2. Go to Manage Contribution Pages > {Your contribution page} > Cofigure > Include Profiles
-		3. Choose the profile that you created and save.
-		5. Go to Contribution Amounts.
-		6. Choose zaakpay payment processor and save.
-		7. Check the processor by going to the test-drive mode.
+		1. Go to Manage Contribution Pages > {Your contribution page} > Cofigure > Include Profiles
+		2. Choose the profile that you created and save.
+		3. Go to Contribution Amounts.
+		4. Choose zaakpay payment processor and save. (make sure that you currency is set to INR)
+		5. Check the processor by going to the test-drive mode.
+		
+	For Events:
+	===========
+		1. Go to Manage Events > {Your Event} > Configure > Online Registration
+		2. Include Profile (bottom of page)  > select profile that you created > save.
+		3. Go to "Fees".
+		4. Choose Zaakpay payment Processor and save.(make sure that you currency is set to INR)
+		5. Test the processor by going to the test-drive mode.
+		
 		
 		
 
