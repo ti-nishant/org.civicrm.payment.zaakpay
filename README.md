@@ -1,12 +1,17 @@
 Zaakpay
 =======
+IMPORTANT NOTE: Please read completed README.md to avoid functionality errors.
 
-Zaakpay payment processor for civicrm (Under construction)
+Zaakpay payment processor for civicrm
 
 Resources:
 ==========
 
 https://www.zaakpay.com/developers/guide
+http://civicrm.org/blogs/andyw/civicrm-42-payment-extensions-framework-overview-new-features
+http://wiki.civicrm.org/confluence/display/CRMDOC42/Create+a+Payment-Processor+Extension
+http://wiki.civicrm.org/confluence/display/CRMDOC42/Example+of+creating+a+payment+processor+extension
+http://forum.civicrm.org/index.php?topic=15556.5;wap2
 
 Installation:
 ============
@@ -38,10 +43,10 @@ Usage:
 
 	For Contributions:
 	=================
-		1. Go to Manage Contribution Pages > {Your contribution page} > Cofigure > Include Profiles
+		1. Go to Manage Contribution Pages > {Your contribution page} > Configure > Include Profiles
 		2. Choose the profile that you created and save.
 		3. Go to Contribution Amounts.
-		4. Choose zaakpay payment processor and save. (make sure that you currency is set to INR)
+		4. Choose zaakpay payment processor and save. (make sure that your currency is set to INR)
 		5. Check the processor by going to the test-drive mode.
 		
 	For Events:
@@ -49,9 +54,5 @@ Usage:
 		1. Go to Manage Events > {Your Event} > Configure > Online Registration
 		2. Include Profile (bottom of page)  > select profile that you created > save.
 		3. Go to "Fees".
-		4. Choose Zaakpay payment Processor and save.(make sure that you currency is set to INR)
+		4. Choose Zaakpay payment Processor and save.(make sure that your currency is set to INR)
 		5. Test the processor by going to the test-drive mode.
-		
-		
-		
-
