@@ -10,6 +10,7 @@
     </maintainer>
     <releaseDate>2013-04-18</releaseDate>
     <version>1.0</version>
+    <develStage>devel</develStage>
     <compatibility>
         <ver>4.3</ver>
     </compatibility>
