@@ -38,15 +38,17 @@ Usage Pre-requisites:
 			-> Go to Administer > Localization > Languages, currencies, locations
 			-> Default Currency: INR
 			-> Save.
+		
+		3. Payment Processor settings:
+			-> Go to Administer > System Settings > Payment Processors.
+			-> Select Zaakpay from the list of payment processors.
+			-> Fill in Merchant Id and secret key provided by Zaakpay.
+		
+		4. Change the website currency to INR (Zaakpay only supports INR).
 			
 
 Usage:
 =====
-
-1. Go to Administer > System Settings > Payment Processors.
-2. Select Zaakpay from the list of payment processors.
-3. Fill in Merchant Id and secret key provided by Zaakpay.
-4. Change the website currency to INR (Zaakpay only supports INR).
 
 	For Contributions:
 	=================
