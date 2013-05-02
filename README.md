@@ -1,5 +1,7 @@
 Zaakpay
 =======
+This extension doesnot support recurring payments.
+
 IMPORTANT NOTE: Please read completed README.md to avoid functionality errors.
 
 Zaakpay payment processor for civicrm
@@ -7,11 +9,11 @@ Zaakpay payment processor for civicrm
 Resources:
 ==========
 
-https://www.zaakpay.com/developers/guide
-http://civicrm.org/blogs/andyw/civicrm-42-payment-extensions-framework-overview-new-features
-http://wiki.civicrm.org/confluence/display/CRMDOC42/Create+a+Payment-Processor+Extension
-http://wiki.civicrm.org/confluence/display/CRMDOC42/Example+of+creating+a+payment+processor+extension
-http://forum.civicrm.org/index.php?topic=15556.5;wap2
+	.https://www.zaakpay.com/developers/guide
+	.http://civicrm.org/blogs/andyw/civicrm-42-payment-extensions-framework-overview-new-features
+	.http://wiki.civicrm.org/confluence/display/CRMDOC42/Create+a+Payment-Processor+Extension
+	.http://wiki.civicrm.org/confluence/display/CRMDOC42/Example+of+creating+a+payment+processor+extension
+	.http://forum.civicrm.org/index.php?topic=15556.5;wap2
 
 Installation:
 ============
@@ -22,7 +24,7 @@ Installation:
 Usage Pre-requisites:
 =====================
 
-		Create a Profile with the following fields:
+		1. Create a Profile with the following fields:
 			-> First Name
 			-> Last Name
 			-> Address Name (Primary)
@@ -31,6 +33,11 @@ Usage Pre-requisites:
 			-> Country (Primary)
 			-> Postal Code (Primary)
 			-> Phone-Phone (Primary)
+			
+		2. Localization settings:
+			-> Go to Administer > Localization > Languages, currencies, locations
+			-> Default Currency: INR
+			-> Save.
 			
 
 Usage:
