@@ -1,8 +1,12 @@
 <?xml version="1.0"?>
 <extension key="org.civicrm.payment.zaakpay" type="payment">
+	<downloadUrl>https://github.com/ti-nishant/org.civicrm.payment.zaakpay/archive/master.zip</downloadUrl>
     <file>zaakpay</file>
     <name>Zaakpay</name>
     <description>Zaakpay Payment Processor</description>
+    <urls>
+    	<url desc="Documentation">https://www.zaakpay.com/developers/guide</url>
+  	</urls>
     <license>AGPL</license>
     <maintainer>
         <author>Nishant Bhorodia</author>
@@ -10,7 +14,7 @@
     </maintainer>
     <releaseDate>2013-04-18</releaseDate>
     <version>1.0</version>
-    <develStage>devel</develStage>
+    <develStage>stable</develStage>
     <compatibility>
         <ver>4.3</ver>
     </compatibility>
