@@ -139,6 +139,15 @@ class WebTest_Zaakpay_CiviZaakpayTest extends CiviSeleniumTestCase {
     $this->waitForElementPresent('_qf_Confirm_next-top');
     $this->click("_qf_Confirm_next-top");
     $this->waitForPageToLoad("300000");
+    
+    $this->waitForElementPresent("pan");
+  	
+  	$this->type('pan', '4012888888881881');
+  	$this->select('expiry_month', 'value=12');
+  	$this->select('expiry_year', 'value=20');
+  	$this->type('cvv', '123');
+  	$this->click('paynow0');
+  	$this->waitForPageToLoad(30000);
   }
 
   //create payment processor
