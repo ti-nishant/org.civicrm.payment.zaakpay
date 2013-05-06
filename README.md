@@ -34,9 +34,11 @@ Usage Pre-requisites:
 			-> Postal Code (Primary)
 			-> Phone-Phone (Primary)
 			
-		2. Localization settings:
+		2. Localization settings:(do these settings before running test cases too)
 			-> Go to Administer > Localization > Languages, currencies, locations
 			-> Default Currency: INR
+			-> Default Country: India
+			-> Defaults States: India
 			-> Save.
 		
 		3. Payment Processor settings:
@@ -65,3 +67,6 @@ Usage:
 		3. Go to "Fees".
 		4. Choose Zaakpay payment Processor and save.(make sure that your currency is set to INR)
 		5. Test the processor by going to the test-drive mode.
+		
+
+	
