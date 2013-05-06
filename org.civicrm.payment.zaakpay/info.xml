@@ -5,7 +5,7 @@
     <name>Zaakpay</name>
     <description>Zaakpay Payment Processor</description>
     <urls>
-    	<url desc="Documentation">https://www.zaakpay.com/developers/guide</url>
+    	<url desc="Documentation">https://github.com/ti-nishant/org.civicrm.payment.zaakpay</url>
   	</urls>
     <license>AGPL</license>
     <maintainer>
